@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:game_tetris/game_tetris.dart';
+import 'package:game_tetris/service_injection.dart';
 
 import '../gamer/gamer.dart';
 import '../generated/l10n.dart';
+import '../navigator_action.dart';
 
 class GameController extends StatelessWidget {
   const GameController({super.key});
@@ -154,14 +157,49 @@ class SystemButtonGroup extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
+        // _Description(
+        //   text: S.of(context).sounds,
+        //   child: _Button(
+        //       size: systemButtonSize,
+        //       color: _systemButtonColor,
+        //       enableLongPress: false,
+        //       onTap: () {
+        //         Game.of(context).soundSwitch();
+        //       }),
+        // ),
         _Description(
-          text: S.of(context).sounds,
+          text: 'Exit',
           child: _Button(
               size: systemButtonSize,
-              color: _systemButtonColor,
+              color: Colors.orange,
               enableLongPress: false,
               onTap: () {
-                Game.of(context).soundSwitch();
+                final gameContext = Game.of(context);
+                gameContext.pauseOrResume();
+                showDialog<String>(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    backgroundColor: backgroundColor,
+                    content: const Text('Are you sure you want to exit?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          gameContext.pauseOrResume();
+                          Navigator.pop(context, 'Cancel');
+                        },
+                        child: Text('Cancel', style: TextStyle(color: Colors.grey.shade700),),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          gameContext.pauseOrResume();
+                          injection<NavigatorAction>().execute();
+                        },
+                        child: const Text('OK', style: TextStyle(color: Colors.grey),)
+                      ),
+                    ],
+                  ),
+                );
               }),
         ),
         _Description(
