@@ -193,6 +193,7 @@ class SystemButtonGroup extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           gameContext.pauseOrResume();
+                          gameContext.setScoreOnExit();
                           injection<NavigatorAction>().execute();
                         },
                         child: const Text('OK', style: TextStyle(color: Colors.grey),)

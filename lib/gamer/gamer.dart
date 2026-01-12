@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 import '../material/audios.dart';
+import '../service_injection.dart';
+import '../set_score_action.dart';
 import 'block.dart';
 
 ///the height of game pad
@@ -320,7 +322,14 @@ class GameControl extends State<Game> with RouteAware {
     }
   }
 
+  void setScoreOnExit() {
+    injection<SetScoreAction>().execute(_points);
+  }
+
   void reset() {
+
+    injection<SetScoreAction>().execute(_points);
+
     if (_states == GameStates.none) {
       //可以开始游戏
       _startGame();
